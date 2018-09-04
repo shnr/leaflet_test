@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>Leaflet.js Sample</title>
+<title>Leaflet.js Sample | Custom Pin</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="ja">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
@@ -50,7 +50,7 @@
   </header><!-- /header -->
 
   <main>
-    <h2 class="lead">Default Map</h2>
+    <h2 class="lead">Custom Pin</h2>
     <div id="mapid"></div>
   </main>
 
@@ -72,21 +72,27 @@
     id: 'mapbox.streets'
   }).addTo(mymap);
 
-  L.marker([51.5, -0.09]).addTo(mymap)
-    .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+  var LeafIcon = L.Icon.extend({
+    options: {
+      shadowUrl: './assets/img/mapicon.png',
+      iconSize:     [38, 38],
+      shadowSize:   [38, 38],
+      iconAnchor:   [22, 94],
+      shadowAnchor: [4, 62],
+      popupAnchor:  [-3, -76]
+    }
+  });
 
-  L.circle([51.508, -0.11], 500, {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5
-  }).addTo(mymap).bindPopup("I am a circle.");
+  var greenIcon = new LeafIcon({iconUrl: './assets/img/mapicon.png'});
 
-  L.polygon([
-    [51.509, -0.08],
-    [51.503, -0.06],
-    [51.51, -0.047]
-  ]).addTo(mymap).bindPopup("I am a polygon.");
-
+  L.marker([51.5, -0.09], {icon: greenIcon}).addTo(mymap)
+  // click event
+  .on('click', function(event) {
+    console.log(event)
+    console.log(event.latlng)
+    console.log('icon clicked.')
+  });
+    // .bindPopup("<b>Hey!</b><br />I am a custom marker.").openPopup();
 
   var popup = L.popup();
 
